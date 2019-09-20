@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
       .catch(err => {
         res.status(500).json(err);
       });
+  } else {
+    res.status(401).json({ message: 'please log in' });
   }
-
-  res.status(401).json({ you: 'shall not pass!' });
 };
