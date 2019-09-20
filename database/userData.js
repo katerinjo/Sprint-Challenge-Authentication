@@ -9,5 +9,6 @@ function read(username) {
 }
 
 module.exports = {
-  create
+  create,
+  read
 };

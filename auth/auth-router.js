@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const db = require('../database/userData');
-const authenticate = require('./authenticate-middleware');
+const jwt = require('jsonwebtoken');
 
 router.post('/register', (req, res) => {
   // implement registration
@@ -17,15 +17,18 @@ router.post('/register', (req, res) => {
     });
 });
 
-router.post('/login', authenticate, (req, res) => {
+router.post('/login', (req, res) => {
   // implement login
   const { username, password } = req.body;
 
   db.read(username)
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
-        req.session.user = user;
-        res.status(200).json({ message: 'logged in'});
+        const payload = {username};
+        const secret = "it's a secret";
+        const options = {expiresIn: '1d'};
+        const token = jwt.sign(payload, secret, options);
+        res.status(200).json({ message: 'logged in', token });
       } else {
         res.status(401).json({ message: 'invalid credentials' });
       }
