@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const db = require('../database/userData');
+const authenticate = require('./authenticate-middleware');
 
 router.post('/register', (req, res) => {
   // implement registration
@@ -16,8 +17,10 @@ router.post('/register', (req, res) => {
     });
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', authenticate, (req, res) => {
   // implement login
+  const { username, password } = req.body;
+
 });
 
 module.exports = router;
